@@ -22,5 +22,11 @@
     "url": "https://github.com/Gopikrishna19/xhr-unit-testing/issues"
   },
   "homepage": "https://github.com/Gopikrishna19/xhr-unit-testing#readme",
-  "description": "xhr sinon and mocha unit testing"
+  "description": "xhr sinon and mocha unit testing",
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-3"
+    ]
+  }
 }
