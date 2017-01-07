@@ -7,12 +7,19 @@ describe('XHR Fetch', () => {
 
   const url = 'http://test.env/url';
   let MockXHR,
+    mockXhr,
     sandbox,
     request;
 
   before(() => {
 
     MockXHR = class {
+      constructor() {
+
+        mockXhr = this;
+
+      }
+
       abort() {}
 
       open(method, url, async) {
@@ -98,10 +105,49 @@ describe('XHR Fetch', () => {
 
     }
 
-    expect(response).not.null();
+    expect(response).exists();
     expect(response.statusCode).equals(0);
 
     clock.restore();
+
+  });
+
+  it('should reject when api fails', async() => {
+
+    const promise = xhrFetch(url);
+    let response;
+
+    mockXhr.status = 301;
+    mockXhr.onload();
+
+    try {
+
+      await promise;
+
+      response = null;
+
+    } catch (error) {
+
+      response = error;
+
+    }
+
+    expect(response).exists();
+    expect(response.ok).false();
+
+  });
+
+  it('should resolve on success', async() => {
+
+    const promise = xhrFetch(url);
+
+    mockXhr.status = 200;
+    mockXhr.onload();
+
+    const response = await promise;
+
+    expect(response).exists();
+    expect(response.ok).true();
 
   });
 

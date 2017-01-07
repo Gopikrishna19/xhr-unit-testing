@@ -6,6 +6,14 @@ const defaultOptions = {
   timeout: 0
 };
 
+const prepareResponse = response => {
+
+  return {
+    ok: response.statusCode >= 200 && response.statusCode < 300
+  };
+
+};
+
 export const xhrFetch = (url, options) => {
 
   const xhrOptions = Object.assign(
@@ -20,6 +28,10 @@ export const xhrFetch = (url, options) => {
     xhr(xhrOptions, (error, response) => {
 
       if (error) { return reject(error); }
+
+      const preparedResponse = prepareResponse(response);
+
+      (preparedResponse.ok ? resolve : reject)(preparedResponse);
 
     });
 
