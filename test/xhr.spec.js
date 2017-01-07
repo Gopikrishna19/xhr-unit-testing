@@ -32,6 +32,26 @@ describe('XHR Fetch', () => {
     expect(request.url).equals(url);
     expect(request.method).equals('GET');
     expect(request.async).true();
+    expect(request.timeout).equals(0);
+
+    done();
+
+  });
+
+  it('should allow custom options', done => {
+
+    const options = {
+      body: 'post data',
+      method: 'POST',
+      timeout: 100
+    };
+
+    xhrFetch(url, options);
+
+    expect(request).exists();
+    expect(request.method).equals(options.method);
+    expect(request.timeout).equals(options.timeout);
+    expect(request.requestBody).equals(options.body);
 
     done();
 
