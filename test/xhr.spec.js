@@ -146,9 +146,6 @@ describe('XHR Fetch', () => {
 
     expect(response).exists();
     expect(response.ok).false();
-    expect(response.status).equals(mockXhr.status);
-    expect(response.statusText).equals(http.STATUS_CODES[mockXhr.status]);
-    expect(response.url).equals(url);
 
   });
 
@@ -163,9 +160,40 @@ describe('XHR Fetch', () => {
 
     expect(response).exists();
     expect(response.ok).true();
-    expect(response.status).equals(mockXhr.status);
-    expect(response.statusText).equals(http.STATUS_CODES[mockXhr.status]);
-    expect(response.url).equals(url);
+
+  });
+
+  describe('when done', () => {
+
+    let response;
+
+    beforeEach(async() => {
+
+      const promise = xhrFetch(url);
+
+      mockXhr.status = 200;
+      mockXhr.onload();
+
+      response = await promise;
+
+    });
+
+    describe('given response', () => {
+
+      it('should provide status attributes in response', () => {
+
+        expect(response.status).equals(mockXhr.status);
+        expect(response.statusText).equals(http.STATUS_CODES[mockXhr.status]);
+
+      });
+
+      it('should provide request url in response', () => {
+
+        expect(response.url).equals(url);
+
+      });
+
+    });
 
   });
 
