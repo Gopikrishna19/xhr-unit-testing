@@ -1,22 +1,49 @@
 import {xhrFetch} from '../src/xhr';
-import sinon from 'sinon';
+import xhr from 'xhr';
 import {expect} from 'code';
+import sinon from 'sinon';
 
 describe('XHR Fetch', () => {
 
   const url = 'http://test.env/url';
-  let request,
-    xhr;
+  let MockXHR,
+    callback,
+    sandbox,
+    request;
 
-  beforeEach(() => {
+  before(() => {
 
-    xhr = sinon.useFakeXMLHttpRequest();
+    MockXHR = class {
+      open(method, url, async) {
+        request = Object.assign(
+          {},
+          request,
+          {
+            method,
+            url,
+            async
+          }
+        );
+      }
 
-    xhr.onCreate = req => request = req;
+      send(body) {
+        request = Object.assign({}, request, {body});
+      }
+    };
+
+    xhr.XMLHttpRequest = MockXHR;
+    xhr.XDomainRequest = MockXHR;
 
   });
 
-  afterEach(() => xhr.restore());
+  beforeEach(() => {
+
+    sandbox = sinon.sandbox.create();
+    callback = sandbox.stub();
+
+  });
+
+  afterEach(() => sandbox.restore());
 
   it('should return a promise', () => {
 
@@ -32,7 +59,6 @@ describe('XHR Fetch', () => {
     expect(request.url).equals(url);
     expect(request.method).equals('GET');
     expect(request.async).true();
-    expect(request.timeout).equals(0);
 
     done();
 
@@ -42,8 +68,7 @@ describe('XHR Fetch', () => {
 
     const options = {
       body: 'post data',
-      method: 'POST',
-      timeout: 100
+      method: 'POST'
     };
 
     xhrFetch(url, options);
@@ -51,7 +76,7 @@ describe('XHR Fetch', () => {
     expect(request).exists();
     expect(request.method).equals(options.method);
     expect(request.timeout).equals(options.timeout);
-    expect(request.requestBody).equals(options.body);
+    expect(request.body).equals(options.body);
 
     done();
 

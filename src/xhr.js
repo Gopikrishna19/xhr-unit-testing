@@ -1,3 +1,5 @@
+import xhr from 'xhr';
+
 const defaultOptions = {
   body: null,
   method: 'GET',
@@ -9,18 +11,15 @@ export const xhrFetch = (url, options) => {
   const xhrOptions = Object.assign(
     {},
     defaultOptions,
-    options
+    options,
+    {url}
   );
 
   return new Promise((resolve, reject) => {
 
-    const xhr = new XMLHttpRequest();
-
-    xhr.timeout = xhrOptions.timeout;
-
-    xhr.open(xhrOptions.method, url, true);
-
-    xhr.send(xhrOptions.body);
+    xhr(xhrOptions, () => {
+      console.log('meh');
+    });
 
   });
 

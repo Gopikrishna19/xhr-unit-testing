@@ -30,5 +30,8 @@
       "es2015",
       "stage-3"
     ]
+  },
+  "dependencies": {
+    "xhr": "^2.3.3"
   }
 }
