@@ -1,3 +1,4 @@
+import http from 'http';
 import xhr from 'xhr';
 
 const defaultOptions = {
@@ -14,7 +15,9 @@ const defaultOptions = {
 const prepareResponse = response => {
 
   return {
-    ok: response.statusCode >= 200 && response.statusCode < 300
+    ok: response.statusCode >= 200 && response.statusCode < 300,
+    status: response.statusCode,
+    statusText: http.STATUS_CODES[response.statusCode]
   };
 
 };

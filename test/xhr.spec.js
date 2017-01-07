@@ -1,7 +1,8 @@
-import {xhrFetch} from '../src/xhr';
-import xhr from 'xhr';
+import http from 'http';
 import {expect} from 'code';
 import sinon from 'sinon';
+import xhr from 'xhr';
+import {xhrFetch} from '../src/xhr';
 
 describe('XHR Fetch', () => {
 
@@ -145,6 +146,8 @@ describe('XHR Fetch', () => {
 
     expect(response).exists();
     expect(response.ok).false();
+    expect(response.status).equals(mockXhr.status);
+    expect(response.statusText).equals(http.STATUS_CODES[mockXhr.status]);
 
   });
 
@@ -159,6 +162,8 @@ describe('XHR Fetch', () => {
 
     expect(response).exists();
     expect(response.ok).true();
+    expect(response.status).equals(mockXhr.status);
+    expect(response.statusText).equals(http.STATUS_CODES[mockXhr.status]);
 
   });
 
