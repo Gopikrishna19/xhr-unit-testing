@@ -13,6 +13,8 @@ describe('XHR Fetch', () => {
   before(() => {
 
     MockXHR = class {
+      abort() {}
+
       open(method, url, async) {
         request = Object.assign(
           {},
@@ -72,6 +74,34 @@ describe('XHR Fetch', () => {
     expect(request).exists();
     expect(request.method).equals(options.method);
     expect(request.body).equals(options.body);
+
+  });
+
+  it('should reject on timeout', async() => {
+
+    const clock = sinon.useFakeTimers();
+    const options = {timeout: 100};
+    const promise = xhrFetch(url, options);
+    let response;
+
+    clock.tick(options.timeout + 1);
+
+    try {
+
+      await promise;
+
+      response = null;
+
+    } catch (error) {
+
+      response = error;
+
+    }
+
+    expect(response).not.null();
+    expect(response.statusCode).equals(0);
+
+    clock.restore();
 
   });
 

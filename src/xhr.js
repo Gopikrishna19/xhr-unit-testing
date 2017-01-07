@@ -17,8 +17,10 @@ export const xhrFetch = (url, options) => {
 
   return new Promise((resolve, reject) => {
 
-    xhr(xhrOptions, () => {
-      console.log('meh');
+    xhr(xhrOptions, (error, response) => {
+
+      if (error) { return reject(error); }
+
     });
 
   });
