@@ -1,2 +1,4 @@
 --compilers js:babel-register
 --colors
+--require babel-polyfill
+--require ./test/dom.js
