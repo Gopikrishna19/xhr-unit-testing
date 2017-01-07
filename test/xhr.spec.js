@@ -11,6 +11,10 @@ describe('XHR Fetch', () => {
     request;
 
   class MockXHR {
+    appendRequest(content) {
+      request = Object.assign({}, request, content);
+    }
+
     constructor() {
 
       mockXhr = this;
@@ -20,19 +24,25 @@ describe('XHR Fetch', () => {
     abort() {}
 
     open(method, url, async) {
-      request = Object.assign(
+      this.appendRequest({
+        method,
+        url,
+        async
+      });
+    }
+
+    setRequestHeader(key, value) {
+      const headers = Object.assign(
         {},
-        request,
-        {
-          method,
-          url,
-          async
-        }
+        request.headers,
+        {[key]: value}
       );
+
+      this.appendRequest({headers});
     }
 
     send(body) {
-      request = Object.assign({}, request, {body});
+      this.appendRequest({body})
     }
   }
 
@@ -61,6 +71,10 @@ describe('XHR Fetch', () => {
     expect(request.url).equals(url);
     expect(request.method).equals('GET');
     expect(request.async).true();
+    expect(request.headers).equals({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    });
 
   });
 

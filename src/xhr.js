@@ -3,7 +3,11 @@ import xhr from 'xhr';
 const defaultOptions = {
   body: null,
   method: 'GET',
-  timeout: 0
+  timeout: 0,
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
 };
 
 const prepareResponse = response => {
