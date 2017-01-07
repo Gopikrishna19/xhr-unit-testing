@@ -6,47 +6,42 @@ import sinon from 'sinon';
 describe('XHR Fetch', () => {
 
   const url = 'http://test.env/url';
-  let MockXHR,
-    mockXhr,
+  let mockXhr,
     sandbox,
     request;
 
-  before(() => {
+  class MockXHR {
+    constructor() {
 
-    MockXHR = class {
-      constructor() {
+      mockXhr = this;
 
-        mockXhr = this;
+    }
 
-      }
+    abort() {}
 
-      abort() {}
+    open(method, url, async) {
+      request = Object.assign(
+        {},
+        request,
+        {
+          method,
+          url,
+          async
+        }
+      );
+    }
 
-      open(method, url, async) {
-        request = Object.assign(
-          {},
-          request,
-          {
-            method,
-            url,
-            async
-          }
-        );
-      }
-
-      send(body) {
-        request = Object.assign({}, request, {body});
-      }
-    };
-
-    xhr.XMLHttpRequest = MockXHR;
-    xhr.XDomainRequest = MockXHR;
-
-  });
+    send(body) {
+      request = Object.assign({}, request, {body});
+    }
+  }
 
   beforeEach(() => {
 
     sandbox = sinon.sandbox.create();
+
+    xhr.XMLHttpRequest = MockXHR;
+    xhr.XDomainRequest = MockXHR;
 
   });
 
