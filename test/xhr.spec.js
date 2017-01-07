@@ -148,6 +148,7 @@ describe('XHR Fetch', () => {
     expect(response.ok).false();
     expect(response.status).equals(mockXhr.status);
     expect(response.statusText).equals(http.STATUS_CODES[mockXhr.status]);
+    expect(response.url).equals(url);
 
   });
 
@@ -164,6 +165,7 @@ describe('XHR Fetch', () => {
     expect(response.ok).true();
     expect(response.status).equals(mockXhr.status);
     expect(response.statusText).equals(http.STATUS_CODES[mockXhr.status]);
+    expect(response.url).equals(url);
 
   });
 
