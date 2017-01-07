@@ -67,6 +67,8 @@ describe('XHR Fetch', () => {
 
     xhrFetch(url);
 
+    expect(mockXhr.withCredentials).true();
+
     expect(request).exists();
     expect(request.url).equals(url);
     expect(request.method).equals('GET');
