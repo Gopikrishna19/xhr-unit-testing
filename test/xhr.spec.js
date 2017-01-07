@@ -7,7 +7,6 @@ describe('XHR Fetch', () => {
 
   const url = 'http://test.env/url';
   let MockXHR,
-    callback,
     sandbox,
     request;
 
@@ -39,7 +38,6 @@ describe('XHR Fetch', () => {
   beforeEach(() => {
 
     sandbox = sinon.sandbox.create();
-    callback = sandbox.stub();
 
   });
 
@@ -51,7 +49,7 @@ describe('XHR Fetch', () => {
 
   });
 
-  it('should make a request to the given url', done => {
+  it('should make a request to the given url', () => {
 
     xhrFetch(url);
 
@@ -60,11 +58,9 @@ describe('XHR Fetch', () => {
     expect(request.method).equals('GET');
     expect(request.async).true();
 
-    done();
-
   });
 
-  it('should allow custom options', done => {
+  it('should allow custom options', () => {
 
     const options = {
       body: 'post data',
@@ -75,10 +71,7 @@ describe('XHR Fetch', () => {
 
     expect(request).exists();
     expect(request.method).equals(options.method);
-    expect(request.timeout).equals(options.timeout);
     expect(request.body).equals(options.body);
-
-    done();
 
   });
 
