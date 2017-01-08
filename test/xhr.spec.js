@@ -145,7 +145,9 @@ describe('XHR Fetch', () => {
     }
 
     expect(response).exists();
+    expect(response).instanceOf(Response);
     expect(response.ok).false();
+    expect(response.status).equals(mockXhr.status);
 
   });
 
@@ -159,41 +161,29 @@ describe('XHR Fetch', () => {
     const response = await promise;
 
     expect(response).exists();
+    expect(response).instanceOf(Response);
     expect(response.ok).true();
+    expect(response.status).equals(mockXhr.status);
 
   });
 
-  describe('when done', () => {
+  it('should allow to resolve data', async() => {
 
-    let response;
+    const promise = xhrFetch(url);
+    const data = {
+      foo: 'bar'
+    };
 
-    beforeEach(async() => {
+    mockXhr.status = 200;
+    mockXhr.response = JSON.stringify(data);
 
-      const promise = xhrFetch(url);
+    mockXhr.onload();
 
-      mockXhr.status = 200;
-      mockXhr.onload();
+    const response = await promise;
 
-      response = await promise;
-
-    });
-
-    describe('given response', () => {
-
-      it('should provide status attributes in response', () => {
-
-        expect(response.status).equals(mockXhr.status);
-        expect(response.statusText).equals(http.STATUS_CODES[mockXhr.status]);
-
-      });
-
-      it('should provide request url in response', () => {
-
-        expect(response.url).equals(url);
-
-      });
-
-    });
+    expect(response).exists();
+    expect(response).instanceOf(Response);
+    expect(await response.json()).equals(data);
 
   });
 
