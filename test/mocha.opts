@@ -2,3 +2,4 @@
 --colors
 --require babel-polyfill
 --require ./test/dom.js
+--require isomorphic-fetch
